@@ -1,8 +1,8 @@
 import cv2
 from datetime import datetime
 
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml') 
-eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml') 
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml') 
+eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml') 
 cap = cv2.VideoCapture(0) 
 
 while 1: 
@@ -30,6 +30,7 @@ while 1:
 			cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,127,255),2) 
 
 	filename = datetime.now()
+	cv2.imwrite(filename, cap)
 
 	cv2.imshow('img',img) 
    
