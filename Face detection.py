@@ -6,7 +6,7 @@ face_classifier = cv2.CascadeClassifier(
 )
 
 video_capture = cv2.VideoCapture('http://192.168.18.37:8090/video')
-filename = datetime.now()
+filename = str(datetime.now())
 def detect(vid):
     gray_image = cv2.cvtColor(vid, cv2.COLOR_BGR2GRAY)
     faces = face_classifier.detectMultiScale(gray_image, 1.1, 5, minSize=(40, 40))
