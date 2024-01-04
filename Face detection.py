@@ -1,37 +1,44 @@
 import cv2
 from datetime import datetime
 
-face_classifier = cv2.CascadeClassifier(
-    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-)
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml') 
+eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml') 
+cap = cv2.VideoCapture(0) 
 
-video_capture = cv2.VideoCapture('http://192.168.18.37:8090/video')
-filename = str(datetime.now())
-def detect(vid):
-    gray_image = cv2.cvtColor(vid, cv2.COLOR_BGR2GRAY)
-    faces = face_classifier.detectMultiScale(gray_image, 1.1, 5, minSize=(40, 40))
-    for (x, y, w, h) in faces:
-        cv2.rectangle(vid, (x, y), (x + w, y + h), (0, 100, 0), 4)
-    return faces
+while 1: 
 
-img = cv2.imread(video_capture)
+	
+	ret, img = cap.read() 
 
-while True:
+	
+	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
 
-    result, video_frame = video_capture.read()
-    if result is False:
-        break
+	 
+	faces = face_cascade.detectMultiScale(gray, 1.3, 5) 
 
-    faces = detect(
-        video_frame)
-    cv2.imwrite(filename, img)
+	for (x,y,w,h) in faces: 
+		
+		cv2.rectangle(img,(x,y),(x+w,y+h),(255,255,0),2) 
+		roi_gray = gray[y:y+h, x:x+w] 
+		roi_color = img[y:y+h, x:x+w] 
 
-    cv2.imshow(
-        "Face Detecting...", video_frame
-    )
+		
+		eyes = eye_cascade.detectMultiScale(roi_gray) 
 
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        break
+		 
+		for (ex,ey,ew,eh) in eyes: 
+			cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,127,255),2) 
 
-video_capture.release()
-cv2.destroyAllWindows()
+	filename = datetime.now()
+
+	cv2.imshow('img',img) 
+   
+
+	 
+	k = cv2.waitKey(30) & 0xff
+	if k == 27: 
+		break
+
+ 
+cap.release()  
+cv2.destroyAllWindows() 
