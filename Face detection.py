@@ -1,5 +1,6 @@
 import cv2
 from datetime import datetime
+import numpy as np
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml') 
 eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml') 
@@ -18,7 +19,7 @@ while 1:
 
 	for (x,y,w,h) in faces: 
 		
-		cv2.circle(img,(x,y),(x+w,y+h),(255,0,0),1.5) 
+		cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),1.5) 
 		roi_gray = gray[y:y+h, x:x+w] 
 		roi_color = img[y:y+h, x:x+w] 
 
@@ -27,19 +28,21 @@ while 1:
 
 		 
 		for (ex,ey,ew,eh) in eyes: 
-			cv2.circle(roi_color,(ex,ey),(ex+ew,ey+eh),(65,105,225),1) 
+			cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(65,105,225),1) 
 
-	filename = str(datetime.now())
-	cv2.imshow('img',img) 
-   
+    filename = str(datetime.now())
 
-	 
+    cv2.imshow('img',img) 
+    if faces:
+        plt.imshow(img)
+		plt.savefig(f'{filename}.png')
+        plt.cla()
+		
+
 	k = cv2.waitKey(30) & 0xff
 	if k == 27: 
 		break
-while 1:
- if faces == True:
-      cv2.imwrite(filename, cap)
+
 
  
 cap.release()  
