@@ -18,7 +18,7 @@ while 1:
 
 	for (x,y,w,h) in faces: 
 		
-		cv2.rectangle(img,(x,y),(x+w,y+h),(255,255,0),2) 
+		cv2.circle(img,(x,y),(x+w,y+h),(255,0,0),1.5) 
 		roi_gray = gray[y:y+h, x:x+w] 
 		roi_color = img[y:y+h, x:x+w] 
 
@@ -27,11 +27,9 @@ while 1:
 
 		 
 		for (ex,ey,ew,eh) in eyes: 
-			cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,127,255),2) 
+			cv2.circle(roi_color,(ex,ey),(ex+ew,ey+eh),(65,105,225),1) 
 
-	filename = datetime.now()
-	cv2.imwrite(filename, cap)
-
+	filename = str(datetime.now())
 	cv2.imshow('img',img) 
    
 
@@ -39,6 +37,9 @@ while 1:
 	k = cv2.waitKey(30) & 0xff
 	if k == 27: 
 		break
+while 1:
+ if faces == True:
+      cv2.imwrite(filename, cap)
 
  
 cap.release()  
